@@ -5,8 +5,9 @@ set(CMAKE_CXX_STANDARD 14)
 
 find_package(OpenCV REQUIRED)
 find_package(yaml-cpp REQUIRED)
+find_package(nlohmann_json REQUIRED)
 
-include_directories(${OpenCV_INCLUDE_DIRS} /opt/intel/openvino/runtime/include)
+include_directories(${OpenCV_INCLUDE_DIRS} /opt/intel/openvino_2023.3.0/runtime/include)
 
 set(SOURCES
 	utils.cc
@@ -14,12 +15,12 @@ set(SOURCES
 )
 
 add_library(inference_lib ${SOURCES})
-target_link_libraries(inference_lib ${OpenCV_LIBS} /opt/intel/openvino/runtime/lib/intel64/libopenvino.so yaml-cpp)
+target_link_libraries(inference_lib ${OpenCV_LIBS} /opt/intel/openvino_2023.3.0/runtime/lib/intel64/libopenvino.so yaml-cpp nlohmann_json::nlohmann_json)
 
 add_executable(camera main_camera.cc)
-add_executable(detect main_detect.cc)
+add_executable(yolo10detect main_detect.cc)
 add_executable(video main_video.cc)
 
 target_link_libraries(camera inference_lib)
-target_link_libraries(detect inference_lib)
+target_link_libraries(yolo10detect inference_lib)
 target_link_libraries(video inference_lib)
